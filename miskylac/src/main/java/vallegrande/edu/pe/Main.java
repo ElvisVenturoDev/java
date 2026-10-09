@@ -1,17 +1,23 @@
 package vallegrande.edu.pe;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import vallegrande.edu.pe.view.MainView;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+public class Main extends Application {
+
+    @Override
+    public void start(Stage stage) {
+        MainView view = new MainView();
+        Scene scene = new Scene(view.getRoot(), 1280, 780);
+        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+        stage.setTitle("MiskyLac");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

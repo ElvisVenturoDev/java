@@ -1,0 +1,85 @@
+.root-pane { -fx-background-color: #FFFBF2; -fx-font-family: "Segoe UI"; }
+.scroll, .scroll > .viewport { -fx-background-color: transparent; -fx-background: transparent; }
+
+/* Sidebar */
+.sidebar { -fx-background-color: white; -fx-padding: 22 14; -fx-border-color: #F1E6CC; -fx-border-width: 0 1 0 0; }
+.logo { -fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1E5A8A; }
+.logo-sub { -fx-font-size: 10px; -fx-text-fill: #A38B5C; }
+.section-label { -fx-font-size: 11px; -fx-text-fill: #A38B5C; -fx-padding: 16 0 4 8; }
+.nav-btn { -fx-background-color: transparent; -fx-background-insets: 0; -fx-text-fill: #6B7C93; -fx-font-size: 14px; -fx-alignment: CENTER_LEFT; -fx-padding: 10 14; -fx-background-radius: 12; -fx-cursor: hand; }
+.nav-btn:hover { -fx-background-color: #FFF3D6; }
+.nav-btn.active { -fx-background-color: #E1EEFA; -fx-text-fill: #1E5A8A; -fx-font-weight: bold; }
+.promo { -fx-background-color: linear-gradient(to bottom right, #1E5A8A, #2E7AB8); -fx-background-radius: 14; -fx-padding: 14; }
+.promo-title { -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; }
+.promo-text { -fx-text-fill: #CFE3F5; -fx-font-size: 11px; }
+.promo-btn { -fx-background-color: white; -fx-background-insets: 0; -fx-text-fill: #1E5A8A; -fx-background-radius: 14; -fx-font-size: 11px; -fx-cursor: hand; }
+
+/* Textos */
+.page-title { -fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1F2D3D; }
+.section-title { -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1F2D3D; }
+.panel-title { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1F2D3D; }
+.muted { -fx-text-fill: #7A8CA3; -fx-font-size: 12px; }
+.tiny { -fx-text-fill: #8A97A8; -fx-font-size: 10px; }
+.link-btn { -fx-background-color: transparent; -fx-background-insets: 0; -fx-text-fill: #1E5A8A; -fx-padding: 0; -fx-cursor: hand; -fx-font-size: 12px; }
+
+/* Buscador */
+.search { -fx-background-color: white; -fx-background-radius: 20; -fx-border-color: #F1E6CC; -fx-border-radius: 20; -fx-padding: 8 14; }
+
+/* Tarjetas */
+.card { -fx-background-color: white; -fx-background-radius: 16; -fx-padding: 14 16; -fx-effect: dropshadow(gaussian, rgba(160,130,60,0.12), 12, 0, 0, 3); }
+.card-small { -fx-background-color: white; -fx-background-radius: 14; -fx-padding: 10 14; -fx-effect: dropshadow(gaussian, rgba(160,130,60,0.10), 8, 0, 0, 2); }
+.card-yellow { -fx-background-color: #FFE9A8; -fx-background-radius: 16; }
+.stat-ico { -fx-font-size: 20px; -fx-padding: 0; -fx-background-radius: 14; -fx-text-fill: white; }
+.stat-ico-blue { -fx-background-color: linear-gradient(to bottom right, #1E5A8A, #3C8AD0); }
+.stat-ico-green { -fx-background-color: linear-gradient(to bottom right, #3E9B5F, #6CC48A); }
+.stat-ico-purple { -fx-background-color: linear-gradient(to bottom right, #7C4DDB, #A98BF0); }
+.stat-ico-pink { -fx-background-color: linear-gradient(to bottom right, #E5527A, #F59AB4); }
+.stat-value { -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1F2D3D; }
+.stat-change { -fx-font-size: 10px; -fx-text-fill: #3E9B5F; }
+.stat-down { -fx-font-size: 10px; -fx-text-fill: #D9534F; }
+.benefit-title { -fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1F2D3D; }
+
+/* Banner */
+.banner { -fx-background-color: linear-gradient(to right, #E1EEFA, #FFF1C9); -fx-background-radius: 20; -fx-padding: 28 32; }
+.banner-small { -fx-font-size: 11px; -fx-text-fill: #8A6D1E; -fx-font-weight: bold; }
+.banner-title { -fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1E5A8A; }
+
+/* Botones */
+.primary-btn { -fx-background-color: #1E5A8A; -fx-background-insets: 0; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 9 20; -fx-cursor: hand; }
+.primary-btn:hover { -fx-background-color: #17476D; }
+.add-btn { -fx-background-color: #1E5A8A; -fx-background-insets: 0; -fx-text-fill: white; -fx-background-radius: 20; -fx-min-width: 30; -fx-min-height: 30; -fx-font-weight: bold; -fx-cursor: hand; }
+.add-btn:hover { -fx-background-color: #F5B83D; }
+
+/* Productos */
+.product-card { -fx-background-color: white; -fx-background-radius: 16; -fx-padding: 14; -fx-effect: dropshadow(gaussian, rgba(160,130,60,0.12), 12, 0, 0, 3); }
+.product-name { -fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1F2D3D; }
+.product-price { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1F2D3D; }
+
+/* Gráfico */
+.bar { -fx-background-color: #F5B83D; -fx-background-radius: 6; }
+.bar-hoy { -fx-background-color: #1E5A8A; }
+
+/* Filtros */
+.chip { -fx-background-color: white; -fx-background-insets: 0; -fx-text-fill: #1E5A8A; -fx-background-radius: 20; -fx-border-color: #F1E6CC; -fx-border-radius: 20; -fx-padding: 6 16; -fx-cursor: hand; }
+.chip:hover { -fx-background-color: #F5B83D; -fx-text-fill: white; }
+
+/* Formularios */
+.field { -fx-background-color: #FFFBF2; -fx-background-radius: 12; -fx-border-color: #F1E6CC; -fx-border-radius: 12; -fx-padding: 10 12; }
+.field:focused { -fx-border-color: #1E5A8A; }
+.text-area .content { -fx-background-color: #FFFBF2; -fx-background-radius: 12; }
+.combo-box { -fx-background-color: #FFFBF2; -fx-background-radius: 12; -fx-border-color: #F1E6CC; -fx-border-radius: 12; -fx-padding: 4 6; }
+
+/* Emojis */
+.emoji { -fx-font-family: "Segoe UI Emoji"; }
+
+/* Clientes */
+.avatar { -fx-background-color: linear-gradient(to bottom right, #1E5A8A, #3C8AD0); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 50; -fx-min-width: 42; -fx-min-height: 42; -fx-alignment: center; }
+.badge-min { -fx-background-color: #E1EEFA; -fx-text-fill: #1E5A8A; -fx-background-radius: 10; -fx-padding: 3 10; -fx-font-size: 10px; -fx-font-weight: bold; }
+.badge-may { -fx-background-color: #FFE9A8; -fx-text-fill: #8A6D1E; -fx-background-radius: 10; -fx-padding: 3 10; -fx-font-size: 10px; -fx-font-weight: bold; }
+
+/* Zonas de color de las tarjetas */
+.tile { -fx-background-radius: 12; }
+.tile-blue { -fx-background-color: linear-gradient(to bottom right, #E1EEFA, #BFDDF5); }
+.tile-yellow { -fx-background-color: linear-gradient(to bottom right, #FFF1C9, #FFE08A); }
+.tile-green { -fx-background-color: linear-gradient(to bottom right, #DDF3E4, #B4E3C3); }
+.tile-pink { -fx-background-color: linear-gradient(to bottom right, #FCE1E8, #F8BFCE); }
