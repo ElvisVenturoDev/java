@@ -19,7 +19,6 @@ import java.util.Map;
  */
 public final class Conexion {
     private static final Map<String, String> CONFIG = new HashMap<>();
-
     private static final List<String> BUSCADO = new ArrayList<>();
 
     static {
@@ -56,9 +55,8 @@ public final class Conexion {
     }
 
     public static Connection conectar() throws SQLException {
-        // Valores por defecto = los del comando docker run entregado. Se pueden cambiar con
-        // variables de entorno o con un db.properties opcional.
-        String clave = valor("DB_PASSWORD", "SantaClara2026");
+        // Valores por defecto ajustados a tus credenciales
+        String clave = valor("DB_PASSWORD", "123456");
         String url = "jdbc:mysql://" + valor("DB_HOST", "127.0.0.1") + ":" + valor("DB_PORT", "3308")
                 + "/" + valor("DB_NAME", "Miskylac")
                 + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=utf8";
