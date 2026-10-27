@@ -1,0 +1,218 @@
+/* ============================================================
+   Miskylac - estilos del sistema de gestión
+   Paleta tomada de la web (ASE261S2_T10_wp / styles.css):
+   navy #0f2d4a · navy-dark #081f36 · verde #2a7034 · crema #f4ecdb
+   papel #faf6ec · dorado #e9c986 · arcilla #a85b39 · greige cálido
+   ============================================================ */
+
+.root-pane {
+    -fx-background-color: #faf6ec;
+}
+
+/* SIDEBAR */
+.sidebar {
+    -fx-background-color: #0f2d4a;
+}
+.logo-mark {
+    -fx-background-color: #2a7034;
+    -fx-background-radius: 21 21 3 21; /* círculo con esquina inferior derecha casi recta, como en la web */
+}
+.logo-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-family: "Georgia", serif;
+}
+.sublogo-text {
+    -fx-font-size: 9px;
+    -fx-text-fill: #e9c986;
+}
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 12 20 12 20;
+    -fx-cursor: hand;
+}
+.menu-button:hover {
+    -fx-background-color: #081f36;
+}
+.menu-button-active,
+.menu-button-active:hover {
+    -fx-background-color: #2a7034;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 25px;
+}
+.clock-box {
+    -fx-background-color: #081f36;
+    -fx-background-radius: 15px;
+    -fx-padding: 15px;
+}
+.clock-time {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+.clock-date {
+    -fx-text-fill: #e9c986;
+    -fx-font-size: 12px;
+}
+
+/* CONTENIDO */
+.main-content {
+    -fx-background-color: #faf6ec;
+}
+.content-card {
+    -fx-background-color: white;
+    -fx-background-radius: 15px;
+    -fx-border-color: #e5ded0;
+    -fx-border-radius: 15px;
+}
+.page-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f2d4a;
+    -fx-font-family: "Georgia", serif;
+}
+.page-subtitle {
+    -fx-text-fill: #6f6551;
+    -fx-font-size: 14px;
+}
+.lbl-registros {
+    -fx-text-fill: #6f6551;
+    -fx-font-size: 14px;
+    -fx-padding: 0 15 0 0;
+}
+.lbl-error {
+    -fx-text-fill: #a85b39;
+    -fx-font-weight: bold;
+}
+
+/* BOTONES */
+.btn-actualizar {
+    -fx-background-color: #0f2d4a;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20px;
+    -fx-padding: 8 20 8 20;
+    -fx-cursor: hand;
+}
+.btn-actualizar:hover {
+    -fx-background-color: #081f36;
+}
+.btn-eliminar {
+    -fx-background-color: transparent;
+    -fx-text-fill: #a85b39;
+    -fx-font-weight: bold;
+    -fx-border-color: #a85b39;
+    -fx-border-radius: 20px;
+    -fx-padding: 7 20 7 20;
+    -fx-cursor: hand;
+}
+.btn-eliminar:hover {
+    -fx-background-color: #f8ece6;
+}
+.btn-limpiar {
+    -fx-background-color: transparent;
+    -fx-text-fill: #0f2d4a;
+    -fx-font-weight: bold;
+    -fx-border-color: #0f2d4a;
+    -fx-border-radius: 20px;
+    -fx-padding: 7 20 7 20;
+    -fx-cursor: hand;
+}
+.btn-limpiar:hover {
+    -fx-background-color: #f1ece1;
+}
+.search-field {
+    -fx-background-color: #f8f5ee;
+    -fx-border-color: #e5ded0;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px;
+}
+.search-field:focused {
+    -fx-border-color: #2a7034;
+}
+
+/* TARJETAS DE INICIO */
+.stat-card {
+    -fx-background-color: #f8f5ee;
+    -fx-background-radius: 15px;
+    -fx-border-color: #e5ded0;
+    -fx-border-radius: 15px;
+    -fx-padding: 22;
+}
+.stat-card-link {
+    -fx-cursor: hand;
+}
+.stat-card-link:hover {
+    -fx-background-color: #e7f2e9;
+    -fx-border-color: #2a7034;
+}
+.stat-value {
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2a7034;
+    -fx-font-family: "Georgia", serif;
+}
+.stat-title {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6f6551;
+}
+
+/* DETALLE DE MENSAJE */
+.detalle-mensaje {
+    -fx-background-color: #f8f5ee;
+    -fx-border-color: #e5ded0;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+/* TABLAS */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.table-view .column-header-background {
+    -fx-background-color: #0f2d4a;
+}
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.table-row-cell:odd {
+    -fx-background-color: #f8f5ee;
+}
+.table-row-cell:even {
+    -fx-background-color: white;
+}
+.table-row-cell:selected {
+    -fx-background-color: #e7f2e9;
+}
+.table-row-cell:selected .text {
+    -fx-fill: #0f2d4a;
+}
+
+/* FORMULARIOS (diálogos de crear / editar) */
+.form-label {
+    -fx-text-fill: #564e3d;
+    -fx-font-weight: bold;
+    -fx-padding: 8 0 0 0;
+}
+.dialog-pane {
+    -fx-background-color: white;
+}
+.dialog-pane > .button-bar > .container {
+    -fx-background-color: white;
+}
+.text-area, .combo-box {
+    -fx-background-color: #f8f5ee;
+    -fx-border-color: #e5ded0;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}

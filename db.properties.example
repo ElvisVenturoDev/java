@@ -1,0 +1,6 @@
+# OPCIONAL: solo si quieres cambiar algún valor. Copia como db.properties.
+DB_HOST=127.0.0.1
+DB_PORT=3308
+DB_USER=santa_clara
+DB_PASSWORD=SantaClara2026
+DB_NAME=Miskylac
