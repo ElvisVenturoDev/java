@@ -29,6 +29,7 @@ public class MainView {
         paginas.put(Section.CLIENTES, new ClientesView());
         paginas.put(Section.CONTACTOS, new ContactosView());
         paginas.put(Section.CUENTA, new CuentaView());
+        paginas.put(Section.LOGIN, new LoginView());
 
         VBox sidebar = new VBox(20);
         sidebar.getStyleClass().add("sidebar");
@@ -44,7 +45,8 @@ public class MainView {
                 crearBoton("Productos", Section.PRODUCTOS),
                 crearBoton("Clientes", Section.CLIENTES),
                 crearBoton("Contactos", Section.CONTACTOS),
-                crearBoton("Cuenta", Section.CUENTA));
+                crearBoton("Cuenta", Section.CUENTA),
+                crearBoton("Login", Section.LOGIN));
 
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);

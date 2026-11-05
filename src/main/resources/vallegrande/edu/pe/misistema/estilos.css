@@ -88,6 +88,10 @@
     -fx-text-fill: #a85b39;
     -fx-font-weight: bold;
 }
+.lbl-ok {
+    -fx-text-fill: #2a7034;
+    -fx-font-weight: bold;
+}
 
 /* BOTONES */
 .btn-actualizar {
@@ -215,4 +219,45 @@
     -fx-border-color: #e5ded0;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
+}
+
+/* LOGIN */
+.login-root {
+    -fx-background-color: #0f2d4a;
+}
+.login-card {
+    -fx-background-color: #faf6ec;
+    -fx-background-radius: 18px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 24, 0.2, 0, 8);
+}
+.login-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f2d4a;
+    -fx-font-family: "Georgia", serif;
+    -fx-padding: 0 0 10 0;
+}
+.login-card .text-field,
+.login-card .password-field {
+    -fx-background-color: white;
+    -fx-border-color: #d9cfb8;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 14px;
+}
+.login-card .text-field:focused,
+.login-card .password-field:focused {
+    -fx-border-color: #2a7034;
+}
+.login-error {
+    -fx-text-fill: #a85b39;
+    -fx-font-size: 12px;
+}
+.login-session {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f2d4a;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
 }

@@ -1,6 +1,6 @@
 -- =====================================================================
 --  Miskylac · Esquema de base de datos (MySQL 8)
---  Base: Miskylac   Usuario: santa_clara
+--  Base: Miskylac   Sesion: santa_clara
 --  Se puede ejecutar varias veces sin perder datos (CREATE ... IF NOT EXISTS).
 -- =====================================================================
 CREATE DATABASE IF NOT EXISTS Miskylac
@@ -107,6 +107,27 @@ CREATE TABLE IF NOT EXISTS mensaje_contacto (
     creado_en     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (identificador)
 ) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- USUARIOS DEL SISTEMA (login de escritorio)
+-- Contraseña guardada como SHA-256.
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS usuario (
+    id        INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    username  VARCHAR(60)  NOT NULL,
+    password  CHAR(64)     NOT NULL,
+    nombre    VARCHAR(120) NOT NULL,
+    rol       VARCHAR(30)  NOT NULL DEFAULT 'admin',
+    activo    TINYINT(1)   NOT NULL DEFAULT 1,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_usuario_username (username)
+) ENGINE=InnoDB;
+
+-- Sesion inicial: admin / admin123 (cámbialo en producción)
+INSERT INTO usuario (username, password, nombre, rol)
+SELECT 'admin', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9',
+       'Administrador', 'admin'
+WHERE NOT EXISTS (SELECT 1 FROM usuario WHERE username = 'admin');
 
 -- ---------------------------------------------------------------------
 -- DATOS DE EJEMPLO (solo si las tablas están vacías)
