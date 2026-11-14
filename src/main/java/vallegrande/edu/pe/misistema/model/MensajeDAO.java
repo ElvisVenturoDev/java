@@ -6,6 +6,8 @@ import java.util.List;
 
 public class MensajeDAO {
     private static final String TABLA = "mensaje_contacto";
+    /** El teléfono del contacto se guarda en la columna `celular` del esquema. */
+    private static final String COLUMNA_CELULAR = "celular";
 
     /** Detecta la clave primaria real de la tabla para no depender de su nombre. */
     private String clavePrimaria(Connection c) throws SQLException {
@@ -30,7 +32,7 @@ public class MensajeDAO {
                 while (rs.next()) {
                     String fecha = colFecha == 0 ? "" : String.valueOf(rs.getObject(colFecha));
                     if (fecha.length() > 16) fecha = fecha.substring(0, 16);
-                    lista.add(new Mensaje(rs.getInt(pk), fecha, texto(rs, "nombre"), texto(rs, "celular"),
+                    lista.add(new Mensaje(rs.getInt(pk), fecha, texto(rs, "nombre"), texto(rs, COLUMNA_CELULAR),
                             texto(rs, "correo"), texto(rs, "asunto"), texto(rs, "mensaje")));
                 }
             }
@@ -41,7 +43,7 @@ public class MensajeDAO {
     public void insertar(Mensaje m) throws SQLException {
         try (Connection c = Conexion.conectar();
              PreparedStatement ps = c.prepareStatement("INSERT INTO " + TABLA
-                     + " (nombre, celular, correo, asunto, mensaje) VALUES (?, ?, ?, ?, ?)")) {
+                     + " (nombre, " + COLUMNA_CELULAR + ", correo, asunto, mensaje) VALUES (?, ?, ?, ?, ?)")) {
             llenar(ps, m);
             ps.executeUpdate();
         }
@@ -51,7 +53,7 @@ public class MensajeDAO {
         try (Connection c = Conexion.conectar()) {
             String pk = clavePrimaria(c);
             try (PreparedStatement ps = c.prepareStatement("UPDATE " + TABLA
-                    + " SET nombre = ?, celular = ?, correo = ?, asunto = ?, mensaje = ? WHERE `" + pk + "` = ?")) {
+                    + " SET nombre = ?, " + COLUMNA_CELULAR + " = ?, correo = ?, asunto = ?, mensaje = ? WHERE `" + pk + "` = ?")) {
                 llenar(ps, m);
                 ps.setInt(6, m.getId());
                 ps.executeUpdate();
