@@ -3,23 +3,23 @@ package vallegrande.edu.pe.misistema.model;
 /** Usuario del sistema (tabla usuario). */
 public class Usuario {
     private final int id;
-    private final String username, nombre, rol;
+    private final String nombreUsuario, nombre, rol;
     private final boolean activo;
 
-    public Usuario(int id, String username, String nombre, String rol) {
-        this(id, username, nombre, rol, true);
+    public Usuario(int id, String nombreUsuario, String nombre, String rol) {
+        this(id, nombreUsuario, nombre, rol, true);
     }
 
-    public Usuario(int id, String username, String nombre, String rol, boolean activo) {
+    public Usuario(int id, String nombreUsuario, String nombre, String rol, boolean activo) {
         this.id = id;
-        this.username = username;
+        this.nombreUsuario = nombreUsuario;
         this.nombre = nombre;
         this.rol = rol;
         this.activo = activo;
     }
 
     public int getId() { return id; }
-    public String getUsername() { return username; }
+    public String getNombreUsuario() { return nombreUsuario; }
     public String getNombre() { return nombre; }
     public String getRol() { return rol; }
     public boolean isActivo() { return activo; }

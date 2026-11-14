@@ -165,7 +165,7 @@ public class LoginView implements Page {
         Label nombre = new Label(u.getNombre());
         nombre.getStyleClass().add("login-session");
 
-        Label detalle = new Label("Usuario: @" + u.getUsername() + "   ·   Rol: " + u.getRolVisible());
+        Label detalle = new Label("Usuario: @" + u.getNombreUsuario() + "   ·   Rol: " + u.getRolVisible());
         detalle.getStyleClass().add("lbl-registros");
 
         Button cambiar = Ui.boton("Cambiar contraseña", "btn-actualizar", this::abrirCambioPassword);
@@ -216,7 +216,7 @@ public class LoginView implements Page {
 
         Ui.formulario("Cambiar contraseña", g,
                 () -> {
-                    controller.cambiarPassword(u.getId(), actual.getText(),
+                    controller.cambiarClave(u.getId(), actual.getText(),
                             nueva.getText(), confirmar.getText());
                     return true;
                 },

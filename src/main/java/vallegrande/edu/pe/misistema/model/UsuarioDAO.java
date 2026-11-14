@@ -11,13 +11,13 @@ import java.sql.SQLException;
 public class UsuarioDAO {
 
     /** Devuelve el usuario si las credenciales son correctas y está activo; si no, null. */
-    public Usuario autenticar(String username, String password) throws SQLException {
+    public Usuario autenticar(String nombreUsuario, String clave) throws SQLException {
         String sql = "SELECT id, username, nombre, rol, activo FROM usuario "
                 + "WHERE username = ? AND password = ? AND activo = 1";
         try (Connection cn = Conexion.conectar();
              PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setString(1, username);
-            ps.setString(2, hash(password));
+            ps.setString(1, nombreUsuario);
+            ps.setString(2, hash(clave));
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return new Usuario(rs.getInt("id"), rs.getString("username"),
@@ -29,47 +29,47 @@ public class UsuarioDAO {
     }
 
     /** Indica si el nombre de usuario ya está registrado. */
-    public boolean existe(String username) throws SQLException {
+    public boolean existe(String nombreUsuario) throws SQLException {
         try (Connection cn = Conexion.conectar();
              PreparedStatement ps = cn.prepareStatement(
                      "SELECT 1 FROM usuario WHERE username = ?")) {
-            ps.setString(1, username);
+            ps.setString(1, nombreUsuario);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();
             }
         }
     }
 
-    public void registrar(String nombre, String username, String password) throws SQLException {
+    public void registrar(String nombre, String nombreUsuario, String clave) throws SQLException {
         String sql = "INSERT INTO usuario (username, password, nombre, rol, activo) "
                 + "VALUES (?, ?, ?, 'usuario', 1)";
         try (Connection cn = Conexion.conectar();
              PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setString(1, username);
-            ps.setString(2, hash(password));
+            ps.setString(1, nombreUsuario);
+            ps.setString(2, hash(clave));
             ps.setString(3, nombre);
             ps.executeUpdate();
         }
     }
 
     /** Comprueba la contraseña actual de un usuario. */
-    public boolean passwordCorrecta(int id, String password) throws SQLException {
+    public boolean claveCorrecta(int id, String clave) throws SQLException {
         try (Connection cn = Conexion.conectar();
              PreparedStatement ps = cn.prepareStatement(
                      "SELECT 1 FROM usuario WHERE id = ? AND password = ?")) {
             ps.setInt(1, id);
-            ps.setString(2, hash(password));
+            ps.setString(2, hash(clave));
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();
             }
         }
     }
 
-    public void cambiarPassword(int id, String password) throws SQLException {
+    public void cambiarClave(int id, String clave) throws SQLException {
         try (Connection cn = Conexion.conectar();
              PreparedStatement ps = cn.prepareStatement(
                      "UPDATE usuario SET password = ? WHERE id = ?")) {
-            ps.setString(1, hash(password));
+            ps.setString(1, hash(clave));
             ps.setInt(2, id);
             ps.executeUpdate();
         }
