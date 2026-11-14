@@ -82,14 +82,15 @@ final class Ui {
         return b;
     }
 
-    /** Barra con buscador a la izquierda y botones de acción a la derecha. */
-    static HBox barra(TextField buscar, Node... botones) {
+    /** Barra con buscador y botones de acción; se envuelve si falta ancho. */
+    static FlowPane barra(TextField buscar, Node... botones) {
         buscar.getStyleClass().add("search-field");
-        buscar.setPrefWidth(320);
-        Region relleno = new Region();
-        HBox.setHgrow(relleno, Priority.ALWAYS);
-        HBox fila = new HBox(12, buscar, relleno);
+        buscar.setPrefWidth(280);
+        buscar.setMinWidth(180);
+        buscar.setMaxWidth(320);
+        FlowPane fila = new FlowPane(12, 12, buscar);
         fila.setAlignment(Pos.CENTER_LEFT);
+        fila.setPrefWrapLength(900);
         fila.getChildren().addAll(botones);
         return fila;
     }

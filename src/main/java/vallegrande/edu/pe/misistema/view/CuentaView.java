@@ -38,7 +38,7 @@ public class CuentaView implements Page {
             actualizarContador();
         });
 
-        HBox barra = Ui.barra(txtBuscar,
+        FlowPane barra = Ui.barra(txtBuscar,
                 Ui.boton("Nuevo", "btn-actualizar", () -> abrirFormulario(null)),
                 Ui.boton("Editar", "btn-limpiar", this::editar),
                 Ui.boton("Activar / Desactivar", "btn-limpiar", this::cambiarEstado),
