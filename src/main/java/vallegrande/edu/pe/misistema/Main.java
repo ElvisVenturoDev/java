@@ -15,8 +15,8 @@ public class Main extends Application {
                 .getResource("/vallegrande/edu/pe/misistema/estilos.css").toExternalForm());
 
         stage.setTitle("Miskylac - Sistema de gestión");
-        stage.setMinWidth(980);
-        stage.setMinHeight(600);
+        stage.setMinWidth(640);
+        stage.setMinHeight(480);
         stage.setScene(scene);
         stage.show();
     }
