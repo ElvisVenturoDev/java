@@ -1,0 +1,18 @@
+# Credenciales locales (no subir)
+db.properties
+*.pem
+
+# Metadatos y archivos locales de IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+
+# Salidas de compilación y artefactos generados
+target/
+*.class
+dist/
+dist-input/
+
+# Empaquetados locales
+*.zip
