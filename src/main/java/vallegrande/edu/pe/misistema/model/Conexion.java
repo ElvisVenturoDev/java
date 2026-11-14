@@ -13,9 +13,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Conexión a MySQL en el contenedor Docker (127.0.0.1:3308, base Miskylac, usuario santa_clara).
- * Funciona sin archivos extra. Opcional: variables de entorno o db.properties
- * (DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME) para cambiar algún valor.
+ * Conexión a MySQL/MariaDB.
+ *
+ * No hay credenciales ni hosts escritos en el código: todos los valores deben
+ * definirse con variables de entorno o en un archivo db.properties local
+ * (DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME); ver db.properties.example.
+ * El archivo db.properties está excluido del control de versiones.
  */
 public final class Conexion {
     private static final Map<String, String> CONFIG = new HashMap<>();
@@ -43,23 +46,33 @@ public final class Conexion {
                 CONFIG.putIfAbsent(l.substring(0, i).strip(), l.substring(i + 1).strip());
             }
         } catch (IOException ignored) {
-            // Se usan los valores por defecto.
+            // Sin archivo se usan únicamente las variables de entorno.
         }
     }
 
-    private static String valor(String clave, String defecto) {
+    /** Lee una clave obligatoria de las variables de entorno o de db.properties. */
+    private static String valor(String clave) {
         String env = System.getenv(clave);
         if (env != null && !env.isBlank()) return env;
         String v = CONFIG.get(clave);
-        return (v != null && !v.isBlank()) ? v : defecto;
+        if (v != null && !v.isBlank()) return v;
+        throw new IllegalStateException("Falta la configuración " + clave
+                + ". Defínala como variable de entorno o en db.properties "
+                + "(copie db.properties.example). Carpetas revisadas: "
+                + String.join(", ", BUSCADO));
     }
 
     public static Connection conectar() throws SQLException {
-        // Valores por defecto ajustados a tus credenciales
-        String clave = valor("DB_PASSWORD", "123456");
-        String url = "jdbc:mysql://" + valor("DB_HOST", "127.0.0.1") + ":" + valor("DB_PORT", "3308")
-                + "/" + valor("DB_NAME", "Miskylac")
-                + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=utf8";
-        return DriverManager.getConnection(url, valor("DB_USER", "santa_clara"), clave);
+        String host = valor("DB_HOST");
+        String puerto = valor("DB_PORT");
+        String base = valor("DB_NAME");
+
+        String url = "jdbc:mysql://" + host + ":" + puerto + "/" + base
+                + "?sslMode=PREFERRED&allowPublicKeyRetrieval=true"
+                + "&serverTimezone=UTC&characterEncoding=utf8"
+                + "&connectTimeout=10000&socketTimeout=30000";
+
+        return DriverManager.getConnection(url, valor("DB_USER"), valor("DB_PASSWORD"));
     }
+
 }

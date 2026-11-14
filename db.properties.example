@@ -1,6 +1,10 @@
-# OPCIONAL: solo si quieres cambiar algún valor. Copia como db.properties.
+# Copia este archivo como db.properties (junto al ejecutable o en la raiz del
+# proyecto) y completa los valores reales. NO subas db.properties a git.
+#
+# Con el tunel SSH activo (tunel.ps1), la app llega a RDS por 127.0.0.1:3306.
+# Si ejecutas la app dentro de la EC2, pon DB_HOST con el endpoint de RDS.
 DB_HOST=127.0.0.1
-DB_PORT=3308
-DB_USER=santa_clara
-DB_PASSWORD=SantaClara2026
+DB_PORT=3306
 DB_NAME=Miskylac
+DB_USER=admin
+DB_PASSWORD=tu_password_real
