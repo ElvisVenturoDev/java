@@ -13,10 +13,13 @@ import vallegrande.edu.pe.misistema.controller.Async;
 
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /** Piezas de interfaz compartidas por todos los apartados. */
 final class Ui {
     private static final String CSS = Ui.class.getResource("/vallegrande/edu/pe/misistema/estilos.css").toExternalForm();
+    private static final Logger REGISTRO = Logger.getLogger(Ui.class.getName());
 
     private Ui() {}
 
@@ -151,7 +154,12 @@ final class Ui {
         nota.getStyleClass().add("lbl-registros");
         VBox cuerpo = new VBox(16, lblTitulo, nota, contenido, error);
         cuerpo.setPadding(new Insets(10));
-        d.getDialogPane().setContent(cuerpo);
+        ScrollPane desplazable = new ScrollPane(cuerpo);
+        desplazable.setFitToWidth(true);
+        desplazable.setMaxHeight(540);
+        desplazable.setPrefViewportWidth(540);
+        d.getDialogPane().setContent(desplazable);
+        d.setResizable(true);
 
         Button ok = (Button) d.getDialogPane().lookupButton(btnGuardar);
         ok.getStyleClass().add("btn-actualizar");
@@ -168,9 +176,13 @@ final class Ui {
 
     // ---------- mensajes ----------
     static String mensaje(Throwable e) {
-        String m = e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
-        if (e instanceof IllegalArgumentException || e instanceof IllegalStateException) return m;
-        return "Error de base de datos: " + m;
+        if (e instanceof IllegalArgumentException || e instanceof IllegalStateException) {
+            String m = e.getMessage();
+            return (m == null || m.isBlank()) ? "No se pudo completar la operación." : m;
+        }
+        // El detalle técnico queda solo en el registro interno, nunca en la interfaz.
+        REGISTRO.log(Level.WARNING, "Error inesperado al ejecutar una operación", e);
+        return "No se pudo completar la operación. Verifica los datos e inténtalo nuevamente.";
     }
 
     static void error(Label estado, Throwable e) {
