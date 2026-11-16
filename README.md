@@ -28,6 +28,11 @@ datos iniciales ejecutando:
 mysql -u <usuario> -p < src/resources/esquema.sql
 ```
 
+La aplicación de escritorio usa **las mismas tablas que la web**:
+`customers`, `customer_details`, `products`, `inventory`, `sales`,
+`sale_details` y `contact_messages`. La tabla `usuario` es exclusiva del login
+de escritorio.
+
 El script usa `CREATE DATABASE IF NOT EXISTS` y `CREATE TABLE IF NOT EXISTS`,
 por lo que puede ejecutarse varias veces sin perder los datos existentes.
 
@@ -36,28 +41,34 @@ por lo que puede ejecutarse varias veces sin perder los datos existentes.
 La aplicación **no contiene credenciales en el código**. Los datos de conexión
 se leen, por orden de prioridad, de:
 
-1. Variables de entorno: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`.
-2. Un archivo `db.properties` local (en la raíz del proyecto o junto al ejecutable).
+1. Variables de entorno: `SSH_HOST`, `SSH_PORT`, `SSH_USER`, `SSH_KEY`,
+   `RDS_ENDPOINT`, `LOCAL_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`.
+2. Un archivo `config.properties` local (en la raíz del proyecto o junto al
+   ejecutable).
 
 Copia el archivo de ejemplo y completa tus valores:
 
 ```bash
-copy db.properties.example db.properties   # Windows
-cp db.properties.example db.properties     # Linux/macOS
+copy config.properties.example config.properties   # Windows
+cp config.properties.example config.properties     # Linux/macOS
 ```
 
-Contenido esperado de `db.properties`:
+Contenido esperado de `config.properties`:
 
 ```properties
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_NAME=Miskylac
-DB_USER=<tu_usuario>
-DB_PASSWORD=<tu_contraseña>
+ssh.host=<IP o DNS de la EC2>
+ssh.port=22
+ssh.user=ubuntu
+ssh.key=C:/ruta/a/tu-llave.pem
+rds.endpoint=<endpoint-del-RDS>
+local.port=3307
+db.name=Miskylac
+db.user=<tu_usuario>
+db.password=<tu_contraseña>
 ```
 
-`db.properties` y `*.pem` están excluidos en `.gitignore`; **no** los subas al
-repositorio. Si falta alguna de las claves obligatorias, la aplicación muestra
+`config.properties` y `*.pem` están excluidos en `.gitignore`; **no** los subas
+al repositorio. Si falta alguna de las claves obligatorias, la aplicación muestra
 un mensaje indicando cuál debe configurarse.
 
 ## 3. Ejecutar la aplicación
@@ -102,6 +113,8 @@ src/main/resources/
 ## Notas
 
 - Las contraseñas de usuario se almacenan con hash SHA-256.
-- El archivo `db.properties` es local y no debe versionarse.
+- El archivo `config.properties` es local y no debe versionarse.
+- La web y la app comparten la misma base y las mismas tablas; si la web cambia
+  el nombre de una tabla o columna, actualiza los DAO de la app.
 - Los directorios de IDE (`.idea/`, `*.iml`) y las salidas de compilación
   (`target/`, `dist/`) están excluidos del control de versiones.

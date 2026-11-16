@@ -5,24 +5,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MensajeDAO {
-    private static final String TABLA = "mensaje_contacto";
-    /** El teléfono del contacto se guarda en la columna `celular` del esquema. */
-    private static final String COLUMNA_CELULAR = "celular";
+    private static final String TABLA = "contact_messages";
+    /** El teléfono del contacto se guarda en la columna `mobile` del esquema. */
+    private static final String COLUMNA_CELULAR = "mobile";
 
     /** Detecta la clave primaria real de la tabla para no depender de su nombre. */
     private String clavePrimaria(Connection c) throws SQLException {
         try (ResultSet rs = c.getMetaData().getPrimaryKeys(c.getCatalog(), null, TABLA)) {
             if (rs.next()) return rs.getString("COLUMN_NAME");
         }
-        return "identificador";
+        return "id";
     }
 
     public List<Mensaje> listar() throws SQLException {
         List<Mensaje> lista = new ArrayList<>();
         try (Connection c = Conexion.conectar()) {
             String pk = clavePrimaria(c);
-            try (Statement st = c.createStatement();
-                 ResultSet rs = st.executeQuery("SELECT * FROM " + TABLA + " ORDER BY `" + pk + "` DESC")) {
+            try (PreparedStatement st = c.prepareStatement(
+                    "SELECT * FROM " + TABLA + " ORDER BY `" + pk + "` DESC");
+                 ResultSet rs = st.executeQuery()) {
                 ResultSetMetaData md = rs.getMetaData();
                 int colFecha = 0;
                 for (int i = 1; i <= md.getColumnCount(); i++) {
@@ -32,8 +33,8 @@ public class MensajeDAO {
                 while (rs.next()) {
                     String fecha = colFecha == 0 ? "" : String.valueOf(rs.getObject(colFecha));
                     if (fecha.length() > 16) fecha = fecha.substring(0, 16);
-                    lista.add(new Mensaje(rs.getInt(pk), fecha, texto(rs, "nombre"), texto(rs, COLUMNA_CELULAR),
-                            texto(rs, "correo"), texto(rs, "asunto"), texto(rs, "mensaje")));
+                    lista.add(new Mensaje(rs.getInt(pk), fecha, texto(rs, "name"), texto(rs, COLUMNA_CELULAR),
+                            texto(rs, "email"), texto(rs, "subject"), texto(rs, "message")));
                 }
             }
         }
@@ -43,7 +44,7 @@ public class MensajeDAO {
     public void insertar(Mensaje m) throws SQLException {
         try (Connection c = Conexion.conectar();
              PreparedStatement ps = c.prepareStatement("INSERT INTO " + TABLA
-                     + " (nombre, " + COLUMNA_CELULAR + ", correo, asunto, mensaje) VALUES (?, ?, ?, ?, ?)")) {
+                     + " (name, " + COLUMNA_CELULAR + ", email, subject, message) VALUES (?, ?, ?, ?, ?)")) {
             llenar(ps, m);
             ps.executeUpdate();
         }
@@ -53,7 +54,7 @@ public class MensajeDAO {
         try (Connection c = Conexion.conectar()) {
             String pk = clavePrimaria(c);
             try (PreparedStatement ps = c.prepareStatement("UPDATE " + TABLA
-                    + " SET nombre = ?, " + COLUMNA_CELULAR + " = ?, correo = ?, asunto = ?, mensaje = ? WHERE `" + pk + "` = ?")) {
+                    + " SET name = ?, " + COLUMNA_CELULAR + " = ?, email = ?, subject = ?, message = ? WHERE `" + pk + "` = ?")) {
                 llenar(ps, m);
                 ps.setInt(6, m.getId());
                 ps.executeUpdate();

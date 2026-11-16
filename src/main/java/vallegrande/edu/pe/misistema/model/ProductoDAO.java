@@ -7,16 +7,17 @@ import java.util.List;
 public class ProductoDAO {
 
     public List<Producto> listar() throws SQLException {
-        String sql = "SELECT p.identificador, p.nombre, p.categoria, p.detalle, p.descripcion, p.imagen_url, "
-                + "p.precio, COALESCE(i.stock, 0) AS stock, COALESCE(i.stock_minimo, 5) AS stock_minimo "
-                + "FROM producto p LEFT JOIN inventario i ON i.identificador_producto = p.identificador "
-                + "WHERE p.activo = 1 ORDER BY p.identificador";
+        String sql = "SELECT p.id, p.name, p.category, p.detail, p.description, p.image_url, "
+                + "p.price, COALESCE(i.stock, 0) AS stock, COALESCE(i.min_stock, 5) AS stock_minimo "
+                + "FROM products p LEFT JOIN inventory i ON i.product_id = p.id "
+                + "WHERE p.active = 1 ORDER BY p.id";
         List<Producto> lista = new ArrayList<>();
-        try (Connection c = Conexion.conectar(); Statement st = c.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+        try (Connection c = Conexion.conectar(); PreparedStatement st = c.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
-                lista.add(new Producto(rs.getInt("identificador"), rs.getString("nombre"), rs.getString("categoria"),
-                        rs.getString("detalle"), rs.getString("descripcion"), rs.getString("imagen_url"),
-                        rs.getDouble("precio"), rs.getInt("stock"), rs.getInt("stock_minimo")));
+                lista.add(new Producto(rs.getInt("id"), rs.getString("name"), rs.getString("category"),
+                        rs.getString("detail"), rs.getString("description"), rs.getString("image_url"),
+                        rs.getDouble("price"), rs.getInt("stock"), rs.getInt("stock_minimo")));
             }
         }
         return lista;
@@ -28,7 +29,7 @@ public class ProductoDAO {
             try {
                 int id;
                 try (PreparedStatement ps = c.prepareStatement(
-                        "INSERT INTO producto (nombre, categoria, detalle, descripcion, precio, imagen_url) "
+                        "INSERT INTO products (name, category, detail, description, price, image_url) "
                                 + "VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
                     llenar(ps, p);
                     ps.executeUpdate();
@@ -51,8 +52,8 @@ public class ProductoDAO {
             c.setAutoCommit(false);
             try {
                 try (PreparedStatement ps = c.prepareStatement(
-                        "UPDATE producto SET nombre = ?, categoria = ?, detalle = ?, descripcion = ?, "
-                                + "precio = ?, imagen_url = ? WHERE identificador = ?")) {
+                        "UPDATE products SET name = ?, category = ?, detail = ?, description = ?, "
+                                + "price = ?, image_url = ? WHERE id = ?")) {
                     llenar(ps, p);
                     ps.setInt(7, p.getId());
                     ps.executeUpdate();
@@ -75,11 +76,11 @@ public class ProductoDAO {
         try (Connection c = Conexion.conectar()) {
             c.setAutoCommit(false);
             try {
-                try (PreparedStatement ps = c.prepareStatement("DELETE FROM inventario WHERE identificador_producto = ?")) {
+                try (PreparedStatement ps = c.prepareStatement("DELETE FROM inventory WHERE product_id = ?")) {
                     ps.setInt(1, id);
                     ps.executeUpdate();
                 }
-                try (PreparedStatement ps = c.prepareStatement("DELETE FROM producto WHERE identificador = ?")) {
+                try (PreparedStatement ps = c.prepareStatement("DELETE FROM products WHERE id = ?")) {
                     ps.setInt(1, id);
                     ps.executeUpdate();
                 }
@@ -87,7 +88,7 @@ public class ProductoDAO {
                 return true;
             } catch (SQLIntegrityConstraintViolationException e) {
                 c.rollback();
-                try (PreparedStatement ps = c.prepareStatement("UPDATE producto SET activo = 0 WHERE identificador = ?")) {
+                try (PreparedStatement ps = c.prepareStatement("UPDATE products SET active = 0 WHERE id = ?")) {
                     ps.setInt(1, id);
                     ps.executeUpdate();
                 }
@@ -111,8 +112,8 @@ public class ProductoDAO {
 
     private void guardarInventario(Connection c, int idProducto, Producto p) throws SQLException {
         try (PreparedStatement ps = c.prepareStatement(
-                "INSERT INTO inventario (identificador_producto, stock, stock_minimo) VALUES (?, ?, ?) "
-                        + "ON DUPLICATE KEY UPDATE stock = VALUES(stock), stock_minimo = VALUES(stock_minimo)")) {
+                "INSERT INTO inventory (product_id, stock, min_stock) VALUES (?, ?, ?) "
+                        + "ON DUPLICATE KEY UPDATE stock = VALUES(stock), min_stock = VALUES(min_stock)")) {
             ps.setInt(1, idProducto);
             ps.setInt(2, p.getStock());
             ps.setInt(3, p.getMinimoStock());

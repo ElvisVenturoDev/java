@@ -5,17 +5,18 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Cuentas de clientes (tablas cliente y detalle_cliente, como en la web). */
+/** Cuentas de clientes (tablas customers y customer_details, como en la web). */
 public class CuentaDAO {
 
     public List<Cuenta> listar() throws SQLException {
         List<Cuenta> lista = new ArrayList<>();
-        try (Connection c = Conexion.conectar(); Statement st = c.createStatement();
-             ResultSet rs = st.executeQuery(
-                     "SELECT identificador, nombre, telefono, correo, activo FROM cliente ORDER BY identificador")) {
+        try (Connection c = Conexion.conectar();
+             PreparedStatement st = c.prepareStatement(
+                     "SELECT id, name, phone, email, active FROM customers ORDER BY id");
+             ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
-                lista.add(new Cuenta(rs.getInt("identificador"), rs.getString("nombre"),
-                        rs.getString("telefono"), rs.getString("correo"), rs.getBoolean("activo")));
+                lista.add(new Cuenta(rs.getInt("id"), rs.getString("name"),
+                        rs.getString("phone"), rs.getString("email"), rs.getBoolean("active")));
             }
         }
         return lista;
@@ -28,7 +29,7 @@ public class CuentaDAO {
                 int id;
                 // Igual que la web: cliente sin contraseña (password_hash vacío) hasta que se registre.
                 try (PreparedStatement ps = c.prepareStatement(
-                        "INSERT INTO cliente (nombre, telefono, correo, password_hash) VALUES (?, ?, ?, '')",
+                        "INSERT INTO customers (name, phone, email, password_hash) VALUES (?, ?, ?, '')",
                         Statement.RETURN_GENERATED_KEYS)) {
                     ps.setString(1, cu.getNombre());
                     ps.setString(2, vacioANulo(cu.getTelefono()));
@@ -40,12 +41,11 @@ public class CuentaDAO {
                     }
                 }
                 try (PreparedStatement ps = c.prepareStatement(
-                        "INSERT INTO detalle_cliente (identificador_cliente, direccion, tipo_cliente, fecha_registro) "
-                                + "VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE actualizado_en = CURRENT_TIMESTAMP")) {
+                        "INSERT INTO customer_details (customer_id, address, customer_type, registered_on) "
+                                + "VALUES (?, 'Sin dirección', 'Minorista', ?) "
+                                + "ON DUPLICATE KEY UPDATE updated_at = CURRENT_TIMESTAMP")) {
                     ps.setInt(1, id);
-                    ps.setString(2, "Sin dirección");
-                    ps.setString(3, "Minorista");
-                    ps.setDate(4, Date.valueOf(LocalDate.now()));
+                    ps.setDate(2, Date.valueOf(LocalDate.now()));
                     ps.executeUpdate();
                 }
                 c.commit();
@@ -59,7 +59,7 @@ public class CuentaDAO {
     public void actualizar(Cuenta cu) throws SQLException {
         try (Connection c = Conexion.conectar();
              PreparedStatement ps = c.prepareStatement(
-                     "UPDATE cliente SET nombre = ?, telefono = ?, correo = ? WHERE identificador = ?")) {
+                     "UPDATE customers SET name = ?, phone = ?, email = ? WHERE id = ?")) {
             ps.setString(1, cu.getNombre());
             ps.setString(2, vacioANulo(cu.getTelefono()));
             ps.setString(3, cu.getCorreo());
@@ -70,7 +70,7 @@ public class CuentaDAO {
 
     public void cambiarEstado(int id, boolean activo) throws SQLException {
         try (Connection c = Conexion.conectar();
-             PreparedStatement ps = c.prepareStatement("UPDATE cliente SET activo = ? WHERE identificador = ?")) {
+             PreparedStatement ps = c.prepareStatement("UPDATE customers SET active = ? WHERE id = ?")) {
             ps.setBoolean(1, activo);
             ps.setInt(2, id);
             ps.executeUpdate();
@@ -81,11 +81,11 @@ public class CuentaDAO {
         try (Connection c = Conexion.conectar()) {
             c.setAutoCommit(false);
             try {
-                try (PreparedStatement ps = c.prepareStatement("DELETE FROM detalle_cliente WHERE identificador_cliente = ?")) {
+                try (PreparedStatement ps = c.prepareStatement("DELETE FROM customer_details WHERE customer_id = ?")) {
                     ps.setInt(1, id);
                     ps.executeUpdate();
                 }
-                try (PreparedStatement ps = c.prepareStatement("DELETE FROM cliente WHERE identificador = ?")) {
+                try (PreparedStatement ps = c.prepareStatement("DELETE FROM customers WHERE id = ?")) {
                     ps.setInt(1, id);
                     ps.executeUpdate();
                 }

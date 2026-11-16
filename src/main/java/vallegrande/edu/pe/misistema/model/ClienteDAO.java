@@ -5,22 +5,23 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Clientes con su ficha comercial (cliente + detalle_cliente) y cantidad de pedidos. */
+/** Clientes con su ficha comercial (customers + customer_details) y cantidad de pedidos. */
 public class ClienteDAO {
 
     public List<Cliente> listar() throws SQLException {
-        String sql = "SELECT c.identificador, c.nombre, c.telefono, c.correo, "
-                + "COALESCE(d.direccion, '') AS direccion, COALESCE(d.tipo_cliente, 'Minorista') AS tipo, "
-                + "d.fecha_registro, "
-                + "(SELECT COUNT(*) FROM venta v WHERE v.identificador_cliente = c.identificador) AS pedidos "
-                + "FROM cliente c LEFT JOIN detalle_cliente d ON d.identificador_cliente = c.identificador "
-                + "ORDER BY c.identificador";
+        String sql = "SELECT c.id, c.name, c.phone, c.email, "
+                + "COALESCE(d.address, '') AS address, COALESCE(d.customer_type, 'Minorista') AS customer_type, "
+                + "d.registered_on, "
+                + "(SELECT COUNT(*) FROM sales v WHERE v.customer_id = c.id) AS pedidos "
+                + "FROM customers c LEFT JOIN customer_details d ON d.customer_id = c.id "
+                + "ORDER BY c.id";
         List<Cliente> lista = new ArrayList<>();
-        try (Connection c = Conexion.conectar(); Statement st = c.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+        try (Connection c = Conexion.conectar(); PreparedStatement st = c.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
-                Date f = rs.getDate("fecha_registro");
-                lista.add(new Cliente(rs.getInt("identificador"), rs.getString("nombre"), rs.getString("telefono"),
-                        rs.getString("correo"), rs.getString("direccion"), rs.getString("tipo"),
+                Date f = rs.getDate("registered_on");
+                lista.add(new Cliente(rs.getInt("id"), rs.getString("name"), rs.getString("phone"),
+                        rs.getString("email"), rs.getString("address"), rs.getString("customer_type"),
                         f == null ? "" : f.toString(), rs.getInt("pedidos")));
             }
         }
@@ -33,7 +34,7 @@ public class ClienteDAO {
             try {
                 int id;
                 try (PreparedStatement ps = c.prepareStatement(
-                        "INSERT INTO cliente (nombre, telefono, correo, password_hash) VALUES (?, ?, ?, '')",
+                        "INSERT INTO customers (name, phone, email, password_hash) VALUES (?, ?, ?, '')",
                         Statement.RETURN_GENERATED_KEYS)) {
                     ps.setString(1, cl.getNombre());
                     ps.setString(2, vacioANulo(cl.getTelefono()));
@@ -58,7 +59,7 @@ public class ClienteDAO {
             c.setAutoCommit(false);
             try {
                 try (PreparedStatement ps = c.prepareStatement(
-                        "UPDATE cliente SET nombre = ?, telefono = ?, correo = ? WHERE identificador = ?")) {
+                        "UPDATE customers SET name = ?, phone = ?, email = ? WHERE id = ?")) {
                     ps.setString(1, cl.getNombre());
                     ps.setString(2, vacioANulo(cl.getTelefono()));
                     ps.setString(3, cl.getCorreo());
@@ -78,11 +79,11 @@ public class ClienteDAO {
         try (Connection c = Conexion.conectar()) {
             c.setAutoCommit(false);
             try {
-                try (PreparedStatement ps = c.prepareStatement("DELETE FROM detalle_cliente WHERE identificador_cliente = ?")) {
+                try (PreparedStatement ps = c.prepareStatement("DELETE FROM customer_details WHERE customer_id = ?")) {
                     ps.setInt(1, id);
                     ps.executeUpdate();
                 }
-                try (PreparedStatement ps = c.prepareStatement("DELETE FROM cliente WHERE identificador = ?")) {
+                try (PreparedStatement ps = c.prepareStatement("DELETE FROM customers WHERE id = ?")) {
                     ps.setInt(1, id);
                     ps.executeUpdate();
                 }
@@ -97,9 +98,9 @@ public class ClienteDAO {
     /** Crea o actualiza la ficha; la fecha de registro solo se fija al crearla. */
     private void guardarDetalle(Connection c, int id, Cliente cl, Date hoy) throws SQLException {
         try (PreparedStatement ps = c.prepareStatement(
-                "INSERT INTO detalle_cliente (identificador_cliente, direccion, tipo_cliente, fecha_registro) "
-                        + "VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE direccion = VALUES(direccion), "
-                        + "tipo_cliente = VALUES(tipo_cliente)")) {
+                "INSERT INTO customer_details (customer_id, address, customer_type, registered_on) "
+                        + "VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE address = VALUES(address), "
+                        + "customer_type = VALUES(customer_type), updated_at = CURRENT_TIMESTAMP")) {
             ps.setInt(1, id);
             ps.setString(2, cl.getDireccion());
             ps.setString(3, cl.getTipo());

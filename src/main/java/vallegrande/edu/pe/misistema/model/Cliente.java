@@ -1,6 +1,6 @@
 package vallegrande.edu.pe.misistema.model;
 
-/** Ficha comercial de un cliente (tablas cliente + detalle_cliente). */
+/** Ficha comercial de un cliente (tablas customers + customer_details). */
 public class Cliente {
     private final int id;
     private final String nombre, telefono, correo, direccion, tipo, fechaRegistro;

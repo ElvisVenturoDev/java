@@ -3,10 +3,14 @@ package vallegrande.edu.pe.misistema;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import vallegrande.edu.pe.misistema.model.Conexion;
 import vallegrande.edu.pe.misistema.view.MainView;
 
 public class Main extends Application {
-
+    @Override
+    public void stop() {
+        Conexion.cerrar();
+    }
     @Override
     public void start(Stage stage) {
         MainView view = new MainView();

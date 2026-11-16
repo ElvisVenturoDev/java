@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import vallegrande.edu.pe.misistema.controller.Asincrono;
 
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
@@ -176,13 +177,34 @@ final class Ui {
 
     // ---------- mensajes ----------
     static String mensaje(Throwable e) {
-        if (e instanceof IllegalArgumentException || e instanceof IllegalStateException) {
-            String m = e.getMessage();
+        Throwable raiz = causaRaiz(e);
+        // El detalle técnico completo siempre queda en la consola/registro.
+        REGISTRO.log(Level.SEVERE, "Error al ejecutar una operación", raiz);
+
+        if (raiz instanceof IllegalArgumentException || raiz instanceof IllegalStateException) {
+            String m = raiz.getMessage();
             return (m == null || m.isBlank()) ? "No se pudo completar la operación." : m;
         }
-        // El detalle técnico queda solo en el registro interno, nunca en la interfaz.
-        REGISTRO.log(Level.WARNING, "Error inesperado al ejecutar una operación", e);
-        return "No se pudo completar la operación. Verifica los datos e inténtalo nuevamente.";
+        if (raiz instanceof SQLException sql) {
+            String detalle = sql.getMessage();
+            String mensaje = "Error de base de datos"
+                    + (sql.getSQLState() == null ? "" : " (SQLState " + sql.getSQLState() + ")");
+            return detalle == null || detalle.isBlank() ? mensaje + "." : mensaje + ": " + detalle;
+        }
+        String m = raiz.getMessage();
+        return "No se pudo completar la operación."
+                + (m == null || m.isBlank() ? "" : " Detalle: " + m);
+    }
+
+    /** Desenvuelve excepciones envoltorio hasta la causa real. */
+    private static Throwable causaRaiz(Throwable e) {
+        Throwable actual = e;
+        while (actual.getCause() != null && actual.getCause() != actual
+                && (actual instanceof java.lang.reflect.InvocationTargetException
+                    || actual instanceof java.util.concurrent.ExecutionException)) {
+            actual = actual.getCause();
+        }
+        return actual;
     }
 
     static void error(Label estado, Throwable e) {
