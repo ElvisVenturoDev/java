@@ -1,0 +1,17 @@
+# Copia este archivo como config.properties (junto al ejecutable o en la raiz
+# del proyecto) y completa los valores reales. NO subas config.properties a git.
+#
+# La app abre un tunel SSH hacia la EC2 y desde ahi llega al RDS privado.
+# El puerto local (local.port) debe estar libre en tu PC.
+
+ssh.host=IP_O_DNS_DE_LA_EC2
+ssh.port=22
+ssh.user=ubuntu
+ssh.key=C:/ruta/a/tu-llave.pem
+
+rds.endpoint=mi-instancia.rds.amazonaws.com
+local.port=3307
+
+db.name=Miskylac
+db.user=USUARIO_RDS
+db.password=CLAVE_RDS

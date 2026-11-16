@@ -1,6 +1,8 @@
 # Credenciales locales (no subir)
+config.properties
 db.properties
 *.pem
+.env
 
 # Metadatos y archivos locales de IDE
 .idea/
