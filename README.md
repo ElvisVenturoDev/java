@@ -71,6 +71,20 @@ db.password=<tu_contraseña>
 al repositorio. Si falta alguna de las claves obligatorias, la aplicación muestra
 un mensaje indicando cuál debe configurarse.
 
+### Túnel SSH manual (opcional)
+
+La aplicación ya abre el túnel por su cuenta, pero si necesitas hacerlo aparte:
+
+```bash
+copy tunel.example.ps1 tunel.ps1   # y completa IP, usuario, endpoint y llave
+copy tunel.example.cmd tunel.cmd
+.\tunel.cmd
+```
+
+`tunel.ps1` y `tunel.cmd` contienen datos de tu infraestructura (IP de la EC2,
+endpoint del RDS) y están excluidos del control de versiones; solo se versionan
+las plantillas `tunel.example.*`.
+
 ## 3. Ejecutar la aplicación
 
 Desde la raíz del proyecto, con el plugin de JavaFX configurado en el `pom.xml`:

@@ -4,6 +4,10 @@ db.properties
 *.pem
 .env
 
+# Scripts del tunel con datos reales de la infraestructura (usar *.example.*)
+tunel.ps1
+tunel.cmd
+
 # Metadatos y archivos locales de IDE
 .idea/
 *.iml
@@ -18,3 +22,6 @@ dist-input/
 
 # Empaquetados locales
 *.zip
+
+# JARs de JavaFX descargados a mano (Maven los resuelve desde el pom.xml)
+javafx-modules/
