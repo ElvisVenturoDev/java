@@ -4,7 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import vallegrande.edu.pe.misistema.controller.Async;
+import vallegrande.edu.pe.misistema.controller.Asincrono;
 import vallegrande.edu.pe.misistema.controller.InicioController;
 
 import java.util.function.Consumer;
@@ -57,7 +57,7 @@ public class InicioView implements Page {
     @Override public Node getView() { return raiz; }
 
     @Override public void cargar() {
-        Async.run(controller::resumen, r -> {
+        Asincrono.ejecutar(controller::resumen, r -> {
             vProductos.setText(num(r.productos()));
             vStockBajo.setText(num(r.stockBajo()));
             vClientes.setText(num(r.clientes()));

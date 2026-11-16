@@ -7,7 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import vallegrande.edu.pe.misistema.controller.Async;
+import vallegrande.edu.pe.misistema.controller.Asincrono;
 import vallegrande.edu.pe.misistema.controller.CuentaController;
 import vallegrande.edu.pe.misistema.model.Cuenta;
 
@@ -32,9 +32,9 @@ public class CuentaView implements Page {
         txtBuscar.textProperty().addListener((o, a, nuevo) -> {
             String q = nuevo == null ? "" : nuevo.trim().toLowerCase(Locale.ROOT);
             filtrados.setPredicate(c -> q.isEmpty()
-                    || nz(c.getNombre()).toLowerCase(Locale.ROOT).contains(q)
-                    || nz(c.getCorreo()).toLowerCase(Locale.ROOT).contains(q)
-                    || nz(c.getTelefono()).toLowerCase(Locale.ROOT).contains(q));
+                    || textoSeguro(c.getNombre()).toLowerCase(Locale.ROOT).contains(q)
+                    || textoSeguro(c.getCorreo()).toLowerCase(Locale.ROOT).contains(q)
+                    || textoSeguro(c.getTelefono()).toLowerCase(Locale.ROOT).contains(q));
             actualizarContador();
         });
 
@@ -71,7 +71,7 @@ public class CuentaView implements Page {
         raiz = Ui.pagina(card);
     }
 
-    private static String nz(String s) { return s == null ? "" : s; }
+    private static String textoSeguro(String s) { return s == null ? "" : s; }
 
     private static TableColumn<Cuenta, String> texto(String titulo, String propiedad, double ancho) {
         TableColumn<Cuenta, String> c = new TableColumn<>(titulo);
@@ -121,8 +121,8 @@ public class CuentaView implements Page {
         if (c == null) return;
         boolean nuevo = !c.isActivo();
         if (!Ui.confirmar("Cuenta", "¿Seguro que quieres " + (nuevo ? "activar" : "desactivar")
-                + " la cuenta de " + nz(c.getNombre()) + "?")) return;
-        Async.run(() -> { controller.cambiarEstado(c.getId(), nuevo); return true; },
+                + " la cuenta de " + textoSeguro(c.getNombre()) + "?")) return;
+        Asincrono.ejecutar(() -> { controller.cambiarEstado(c.getId(), nuevo); return true; },
                 ok -> { cargar(); Ui.ok(lblEstado, nuevo ? "Cuenta activada." : "Cuenta desactivada."); },
                 e -> Ui.error(lblEstado, e));
     }
@@ -130,8 +130,8 @@ public class CuentaView implements Page {
     private void eliminar() {
         Cuenta c = seleccionada("Eliminar cuenta");
         if (c == null) return;
-        if (!Ui.confirmar("Eliminar cuenta", "¿Eliminar la cuenta de " + nz(c.getNombre()) + "?")) return;
-        Async.run(() -> { controller.eliminar(c.getId()); return true; },
+        if (!Ui.confirmar("Eliminar cuenta", "¿Eliminar la cuenta de " + textoSeguro(c.getNombre()) + "?")) return;
+        Asincrono.ejecutar(() -> { controller.eliminar(c.getId()); return true; },
                 ok -> { cargar(); Ui.ok(lblEstado, "Cuenta eliminada."); },
                 e -> Ui.error(lblEstado, e));
     }
@@ -139,7 +139,7 @@ public class CuentaView implements Page {
     @Override public Node getView() { return raiz; }
 
     @Override public void cargar() {
-        Async.run(controller::listar, lista -> {
+        Asincrono.ejecutar(controller::listar, lista -> {
             datos.setAll(lista);
             actualizarContador();
         }, e -> Ui.error(lblEstado, e));

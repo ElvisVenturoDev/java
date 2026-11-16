@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import vallegrande.edu.pe.misistema.controller.Async;
+import vallegrande.edu.pe.misistema.controller.Asincrono;
 
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -168,7 +168,7 @@ final class Ui {
             ev.consume();
             ok.setDisable(true);
             error.setText("");
-            Async.run(guardar, r -> { d.close(); despues.run(); },
+            Asincrono.ejecutar(guardar, r -> { d.close(); despues.run(); },
                     e -> { ok.setDisable(false); error.setText(mensaje(e)); });
         });
         d.showAndWait();

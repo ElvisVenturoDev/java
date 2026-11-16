@@ -5,7 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import vallegrande.edu.pe.misistema.controller.Async;
+import vallegrande.edu.pe.misistema.controller.Asincrono;
 import vallegrande.edu.pe.misistema.controller.UsuarioController;
 import vallegrande.edu.pe.misistema.model.Sesion;
 import vallegrande.edu.pe.misistema.model.Usuario;
@@ -68,7 +68,7 @@ public class LoginView implements Page {
         puesto(mensaje, "", false);
         if (entrar != null) entrar.setDisable(true);
 
-        Async.run(() -> controller.iniciarSesion(usuario.getText(), clave.getText()),
+        Asincrono.ejecutar(() -> controller.iniciarSesion(usuario.getText(), clave.getText()),
                 user -> {
                     if (entrar != null) entrar.setDisable(false);
                     if (user == null) {
@@ -137,7 +137,7 @@ public class LoginView implements Page {
         puesto(mensaje, "", false);
         if (registrar != null) registrar.setDisable(true);
 
-        Async.run(() -> {
+        Asincrono.ejecutar(() -> {
                     controller.registrar(nombre.getText(), usuario.getText(),
                             clave.getText(), confirmar.getText());
                     return true;

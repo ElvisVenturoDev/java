@@ -7,7 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import vallegrande.edu.pe.misistema.controller.Async;
+import vallegrande.edu.pe.misistema.controller.Asincrono;
 import vallegrande.edu.pe.misistema.controller.ClienteController;
 import vallegrande.edu.pe.misistema.model.Cliente;
 
@@ -32,10 +32,10 @@ public class ClientesView implements Page {
         txtBuscar.textProperty().addListener((o, a, nuevo) -> {
             String q = nuevo == null ? "" : nuevo.trim().toLowerCase(Locale.ROOT);
             filtrados.setPredicate(c -> q.isEmpty()
-                    || nz(c.getNombre()).toLowerCase(Locale.ROOT).contains(q)
-                    || nz(c.getCorreo()).toLowerCase(Locale.ROOT).contains(q)
-                    || nz(c.getTelefono()).toLowerCase(Locale.ROOT).contains(q)
-                    || nz(c.getDireccion()).toLowerCase(Locale.ROOT).contains(q));
+                    || textoSeguro(c.getNombre()).toLowerCase(Locale.ROOT).contains(q)
+                    || textoSeguro(c.getCorreo()).toLowerCase(Locale.ROOT).contains(q)
+                    || textoSeguro(c.getTelefono()).toLowerCase(Locale.ROOT).contains(q)
+                    || textoSeguro(c.getDireccion()).toLowerCase(Locale.ROOT).contains(q));
             actualizarContador();
         });
 
@@ -77,7 +77,7 @@ public class ClientesView implements Page {
         raiz = Ui.pagina(card);
     }
 
-    private static String nz(String s) { return s == null ? "" : s; }
+    private static String textoSeguro(String s) { return s == null ? "" : s; }
 
     private static TableColumn<Cliente, String> texto(String titulo, String propiedad, double ancho) {
         TableColumn<Cliente, String> c = new TableColumn<>(titulo);
@@ -110,7 +110,7 @@ public class ClientesView implements Page {
         TextField direccion = Ui.campo(c == null ? "" : c.getDireccion());
         ComboBox<String> tipo = new ComboBox<>(FXCollections.observableArrayList("Minorista", "Mayorista", "Distribuidor"));
         tipo.setEditable(true);
-        tipo.setValue(c == null ? "Minorista" : nz(c.getTipo()));
+        tipo.setValue(c == null ? "Minorista" : textoSeguro(c.getTipo()));
         nombre.setPromptText("Nombre completo del cliente");
         telefono.setPromptText("Ej. 987654321 (opcional)");
         correo.setPromptText("Ej. nombre@gmail.com");
@@ -133,8 +133,8 @@ public class ClientesView implements Page {
     private void eliminar() {
         Cliente c = seleccionado("Eliminar cliente");
         if (c == null) return;
-        if (!Ui.confirmar("Eliminar cliente", "¿Eliminar a " + nz(c.getNombre()) + "?")) return;
-        Async.run(() -> { controller.eliminar(c.getId()); return true; },
+        if (!Ui.confirmar("Eliminar cliente", "¿Eliminar a " + textoSeguro(c.getNombre()) + "?")) return;
+        Asincrono.ejecutar(() -> { controller.eliminar(c.getId()); return true; },
                 ok -> { cargar(); Ui.ok(lblEstado, "Cliente eliminado."); },
                 e -> Ui.error(lblEstado, e));
     }
@@ -142,7 +142,7 @@ public class ClientesView implements Page {
     @Override public Node getView() { return raiz; }
 
     @Override public void cargar() {
-        Async.run(controller::listar, lista -> {
+        Asincrono.ejecutar(controller::listar, lista -> {
             datos.setAll(lista);
             actualizarContador();
         }, e -> Ui.error(lblEstado, e));

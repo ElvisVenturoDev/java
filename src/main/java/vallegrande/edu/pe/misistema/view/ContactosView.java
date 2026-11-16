@@ -7,7 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import vallegrande.edu.pe.misistema.controller.Async;
+import vallegrande.edu.pe.misistema.controller.Asincrono;
 import vallegrande.edu.pe.misistema.controller.MensajeController;
 import vallegrande.edu.pe.misistema.model.Mensaje;
 
@@ -127,7 +127,7 @@ public class ContactosView implements Page {
         Mensaje m = tabla.getSelectionModel().getSelectedItem();
         if (m == null) { Ui.aviso("Eliminar mensaje", "Selecciona un mensaje de la tabla primero."); return; }
         if (!Ui.confirmar("Eliminar mensaje", "¿Eliminar el mensaje de " + m.getNombre() + "?")) return;
-        Async.run(() -> { controller.eliminar(m.getId()); return true; },
+        Asincrono.ejecutar(() -> { controller.eliminar(m.getId()); return true; },
                 ok -> { cargar(); Ui.ok(lblEstado, "Mensaje eliminado."); },
                 e -> Ui.error(lblEstado, e));
     }
@@ -135,7 +135,7 @@ public class ContactosView implements Page {
     @Override public Node getView() { return raiz; }
 
     @Override public void cargar() {
-        Async.run(controller::listar, lista -> {
+        Asincrono.ejecutar(controller::listar, lista -> {
             datos.setAll(lista);
             actualizarContador();
         }, e -> Ui.error(lblEstado, e));

@@ -8,7 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import vallegrande.edu.pe.misistema.controller.Async;
+import vallegrande.edu.pe.misistema.controller.Asincrono;
 import vallegrande.edu.pe.misistema.controller.ProductoController;
 import vallegrande.edu.pe.misistema.model.Producto;
 
@@ -33,7 +33,7 @@ public class ProductosView implements Page {
             String q = nuevo == null ? "" : nuevo.trim().toLowerCase(Locale.ROOT);
             filtrados.setPredicate(p -> q.isEmpty()
                     || p.getNombre().toLowerCase(Locale.ROOT).contains(q)
-                    || nz(p.getCategoria()).toLowerCase(Locale.ROOT).contains(q)
+                    || textoSeguro(p.getCategoria()).toLowerCase(Locale.ROOT).contains(q)
                     || String.valueOf(p.getId()).equals(q));
             actualizarContador();
         });
@@ -90,7 +90,7 @@ public class ProductosView implements Page {
         raiz = Ui.pagina(card);
     }
 
-    private static String nz(String s) { return s == null ? "" : s; }
+    private static String textoSeguro(String s) { return s == null ? "" : s; }
 
     private void actualizarContador() {
         int n = filtrados.size();
@@ -109,11 +109,11 @@ public class ProductosView implements Page {
         ComboBox<String> categoria = new ComboBox<>(FXCollections.observableArrayList(
                 "leche", "yogurt", "queso", "mantequilla", "crema"));
         categoria.setEditable(true);
-        categoria.setValue(p == null ? "leche" : nz(p.getCategoria()));
+        categoria.setValue(p == null ? "leche" : textoSeguro(p.getCategoria()));
         TextField detalle = Ui.campo(p == null ? "" : p.getDetalle());
         detalle.setPromptText("Ej. 1 litro, 200 gramos");
         nombre.setPromptText("Ej. Leche Entera Fresca");
-        TextArea descripcion = new TextArea(p == null ? "" : nz(p.getDescripcion()));
+        TextArea descripcion = new TextArea(p == null ? "" : textoSeguro(p.getDescripcion()));
         descripcion.setPrefRowCount(3);
         descripcion.setWrapText(true);
         TextField imagen = Ui.campo(p == null ? "" : p.getUrlImagen());
@@ -148,7 +148,7 @@ public class ProductosView implements Page {
         Producto p = tabla.getSelectionModel().getSelectedItem();
         if (p == null) { Ui.aviso("Eliminar producto", "Selecciona un producto de la tabla primero."); return; }
         if (!Ui.confirmar("Eliminar producto", "¿Eliminar \"" + p.getNombre() + "\"?")) return;
-        Async.run(() -> controller.eliminar(p.getId()), borrado -> {
+        Asincrono.ejecutar(() -> controller.eliminar(p.getId()), borrado -> {
             cargar();
             Ui.ok(lblEstado, borrado ? "Producto eliminado."
                     : "El producto tiene ventas registradas: se desactivó y ya no aparece en la web.");
@@ -158,7 +158,7 @@ public class ProductosView implements Page {
     @Override public Node getView() { return raiz; }
 
     @Override public void cargar() {
-        Async.run(controller::listar, lista -> {
+        Asincrono.ejecutar(controller::listar, lista -> {
             datos.setAll(lista);
             actualizarContador();
         }, e -> Ui.error(lblEstado, e));
