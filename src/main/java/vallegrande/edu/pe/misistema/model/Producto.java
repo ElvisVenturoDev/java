@@ -4,15 +4,15 @@ import java.util.Locale;
 
 public class Producto {
     private final int id;
-    private final String nombre, categoria, detalle, descripcion, imagenUrl;
+    private final String nombre, categoria, detalle, descripcion, urlImagen;
     private final double precio;
-    private final int stock, stockMinimo;
+    private final int stock, minimoStock;
 
     public Producto(int id, String nombre, String categoria, String detalle, String descripcion,
-                    String imagenUrl, double precio, int stock, int stockMinimo) {
+                    String urlImagen, double precio, int stock, int minimoStock) {
         this.id = id; this.nombre = nombre; this.categoria = categoria; this.detalle = detalle;
-        this.descripcion = descripcion; this.imagenUrl = imagenUrl; this.precio = precio;
-        this.stock = stock; this.stockMinimo = stockMinimo;
+        this.descripcion = descripcion; this.urlImagen = urlImagen; this.precio = precio;
+        this.stock = stock; this.minimoStock = minimoStock;
     }
     public int getId() { return id; }
     public String getNombre() { return nombre; }
@@ -23,8 +23,8 @@ public class Producto {
     }
     public String getDetalle() { return detalle; }
     public String getDescripcion() { return descripcion; }
-    public String getImagenUrl() { return imagenUrl; }
+    public String getUrlImagen() { return urlImagen; }
     public double getPrecio() { return precio; }
     public int getStock() { return stock; }
-    public int getStockMinimo() { return stockMinimo; }
+    public int getMinimoStock() { return minimoStock; }
 }

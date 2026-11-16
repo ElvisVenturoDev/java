@@ -13,7 +13,7 @@ public class ProductoController {
 
     /** id = 0 crea un producto nuevo; cualquier otro id actualiza ese producto. */
     public void guardar(int id, String nombre, String categoria, String detalle, String descripcion,
-                        String imagenUrl, String precio, String stock, String stockMinimo) throws SQLException {
+                        String urlImagen, String precio, String stock, String minimoStock) throws SQLException {
         nombre = limpio(nombre);
         categoria = limpio(categoria).toLowerCase();
         detalle = limpio(detalle);
@@ -24,10 +24,10 @@ public class ProductoController {
 
         double p = decimal(precio, "El precio");
         int s = entero(stock, "El stock");
-        int sm = entero(stockMinimo, "El stock mínimo");
+        int sm = entero(minimoStock, "El stock mínimo");
 
         Producto prod = new Producto(id, nombre, categoria, detalle.isEmpty() ? null : detalle,
-                vacioANulo(descripcion), vacioANulo(imagenUrl), p, s, sm);
+                vacioANulo(descripcion), vacioANulo(urlImagen), p, s, sm);
         if (id == 0) dao.insertar(prod); else dao.actualizar(prod);
     }
 

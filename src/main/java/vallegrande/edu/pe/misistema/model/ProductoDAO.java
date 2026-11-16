@@ -106,7 +106,7 @@ public class ProductoDAO {
         ps.setString(3, p.getDetalle());
         ps.setString(4, p.getDescripcion());
         ps.setDouble(5, p.getPrecio());
-        ps.setString(6, p.getImagenUrl());
+        ps.setString(6, p.getUrlImagen());
     }
 
     private void guardarInventario(Connection c, int idProducto, Producto p) throws SQLException {
@@ -115,7 +115,7 @@ public class ProductoDAO {
                         + "ON DUPLICATE KEY UPDATE stock = VALUES(stock), stock_minimo = VALUES(stock_minimo)")) {
             ps.setInt(1, idProducto);
             ps.setInt(2, p.getStock());
-            ps.setInt(3, p.getStockMinimo());
+            ps.setInt(3, p.getMinimoStock());
             ps.executeUpdate();
         }
     }

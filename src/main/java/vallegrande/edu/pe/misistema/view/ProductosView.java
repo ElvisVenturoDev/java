@@ -116,14 +116,14 @@ public class ProductosView implements Page {
         TextArea descripcion = new TextArea(p == null ? "" : nz(p.getDescripcion()));
         descripcion.setPrefRowCount(3);
         descripcion.setWrapText(true);
-        TextField imagen = Ui.campo(p == null ? "" : p.getImagenUrl());
+        TextField imagen = Ui.campo(p == null ? "" : p.getUrlImagen());
         imagen.setPromptText("https://... (opcional)");
         descripcion.setPromptText("Texto corto sobre el producto (opcional)");
         TextField precio = Ui.campo(p == null ? "" : String.format(Locale.US, "%.2f", p.getPrecio()));
         precio.setPromptText("Ej. 6.50");
         TextField stock = Ui.campo(p == null ? "0" : String.valueOf(p.getStock()));
         stock.setPromptText("Unidades disponibles. Ej. 20");
-        TextField stockMin = Ui.campo(p == null ? "5" : String.valueOf(p.getStockMinimo()));
+        TextField stockMin = Ui.campo(p == null ? "5" : String.valueOf(p.getMinimoStock()));
         stockMin.setPromptText("Avisar cuando queden pocas. Ej. 5");
 
         GridPane g = Ui.grid();
