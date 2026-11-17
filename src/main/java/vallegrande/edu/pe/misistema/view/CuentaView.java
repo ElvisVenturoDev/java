@@ -54,20 +54,20 @@ public class CuentaView implements Page {
         tabla.getColumns().add(texto("Teléfono", "telefono", 140));
         tabla.getColumns().add(texto("Correo", "correo", 260));
         tabla.getColumns().add(texto("Estado", "estado", 110));
-        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        ScrollPane desplazador = Ui.tablaDesplazable(tabla);
         tabla.setRowFactory(tv -> {
             TableRow<Cuenta> fila = new TableRow<>();
             fila.setOnMouseClicked(e -> { if (e.getClickCount() == 2 && !fila.isEmpty()) abrirFormulario(fila.getItem()); });
             return fila;
         });
         tabla.setItems(filtrados);
-        VBox.setVgrow(tabla, Priority.ALWAYS);
+        VBox.setVgrow(desplazador, Priority.ALWAYS);
 
         VBox card = Ui.tarjeta();
         card.getChildren().addAll(
                 Ui.encabezado("Cuenta", "Clientes registrados en la web. Doble clic en una fila para editarla.",
                         lblRegistros, Ui.boton("Actualizar", "btn-actualizar", this::cargar)),
-                barra, tabla, lblEstado);
+                barra, desplazador, lblEstado);
         raiz = Ui.pagina(card);
     }
 

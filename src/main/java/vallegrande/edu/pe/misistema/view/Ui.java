@@ -79,6 +79,28 @@ final class Ui {
         return caja;
     }
 
+    /**
+     * Prepara la tabla para ventanas estrechas: mantiene el ancho legible de sus
+     * columnas y la envuelve en un panel con desplazamiento horizontal. Si hay
+     * espacio suficiente, la tabla ocupa todo el ancho disponible.
+     */
+    static <T> ScrollPane tablaDesplazable(TableView<T> tabla) {
+        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        Runnable ajustarMinimo = () -> tabla.setMinWidth(tabla.getColumns().stream()
+                .mapToDouble(TableColumn::getPrefWidth).sum() + 20);
+        ajustarMinimo.run();
+        for (TableColumn<T, ?> columna : tabla.getColumns()) {
+            columna.prefWidthProperty().addListener((o, anterior, actual) -> ajustarMinimo.run());
+        }
+        ScrollPane desplazador = new ScrollPane(tabla);
+        desplazador.setFitToWidth(true);
+        desplazador.setFitToHeight(true);
+        desplazador.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        desplazador.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        desplazador.getStyleClass().add("tabla-scroll");
+        return desplazador;
+    }
+
     static Button boton(String texto, String estilo, Runnable accion) {
         Button b = new Button(texto);
         b.getStyleClass().add(estilo);
@@ -185,15 +207,11 @@ final class Ui {
             String m = raiz.getMessage();
             return (m == null || m.isBlank()) ? "No se pudo completar la operación." : m;
         }
-        if (raiz instanceof SQLException sql) {
-            String detalle = sql.getMessage();
-            String mensaje = "Error de base de datos"
-                    + (sql.getSQLState() == null ? "" : " (SQLState " + sql.getSQLState() + ")");
-            return detalle == null || detalle.isBlank() ? mensaje + "." : mensaje + ": " + detalle;
+        if (raiz instanceof SQLException) {
+            // El detalle técnico queda solo en el registro; al usuario se le muestra un mensaje genérico.
+            return "No se pudo completar la operación por un error de base de datos. Intenta nuevamente.";
         }
-        String m = raiz.getMessage();
-        return "No se pudo completar la operación."
-                + (m == null || m.isBlank() ? "" : " Detalle: " + m);
+        return "No se pudo completar la operación.";
     }
 
     /** Desenvuelve excepciones envoltorio hasta la causa real. */

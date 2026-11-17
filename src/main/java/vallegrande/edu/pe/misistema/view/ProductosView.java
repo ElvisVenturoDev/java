@@ -70,7 +70,7 @@ public class ProductosView implements Page {
         colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         colStock.setPrefWidth(90);
         tabla.getColumns().addAll(colId, colNombre, colCat, colDetalle, colPrecio, colStock);
-        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        ScrollPane desplazador = Ui.tablaDesplazable(tabla);
         tabla.setRowFactory(tv -> {
             TableRow<Producto> fila = new TableRow<>();
             fila.setOnMouseClicked(e -> { if (e.getClickCount() == 2 && !fila.isEmpty()) abrirFormulario(fila.getItem()); });
@@ -80,13 +80,13 @@ public class ProductosView implements Page {
         SortedList<Producto> ordenados = new SortedList<>(filtrados);
         ordenados.comparatorProperty().bind(tabla.comparatorProperty());
         tabla.setItems(ordenados);
-        VBox.setVgrow(tabla, Priority.ALWAYS);
+        VBox.setVgrow(desplazador, Priority.ALWAYS);
 
         VBox card = Ui.tarjeta();
         card.getChildren().addAll(
                 Ui.encabezado("Productos", "Catálogo guardado en la base de datos. Doble clic en una fila para editarla.",
                         lblRegistros, Ui.boton("Actualizar", "btn-actualizar", this::cargar)),
-                barra, tabla, lblEstado);
+                barra, desplazador, lblEstado);
         raiz = Ui.pagina(card);
     }
 

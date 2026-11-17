@@ -60,20 +60,20 @@ public class ClientesView implements Page {
         colPedidos.setCellValueFactory(new PropertyValueFactory<>("pedidos"));
         colPedidos.setPrefWidth(80);
         tabla.getColumns().add(colPedidos);
-        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        ScrollPane desplazador = Ui.tablaDesplazable(tabla);
         tabla.setRowFactory(tv -> {
             TableRow<Cliente> fila = new TableRow<>();
             fila.setOnMouseClicked(e -> { if (e.getClickCount() == 2 && !fila.isEmpty()) abrirFormulario(fila.getItem()); });
             return fila;
         });
         tabla.setItems(filtrados);
-        VBox.setVgrow(tabla, Priority.ALWAYS);
+        VBox.setVgrow(desplazador, Priority.ALWAYS);
 
         VBox card = Ui.tarjeta();
         card.getChildren().addAll(
                 Ui.encabezado("Clientes", "Datos comerciales de tus clientes. Doble clic en una fila para editarla.",
                         lblRegistros, Ui.boton("Actualizar", "btn-actualizar", this::cargar)),
-                barra, tabla, lblEstado);
+                barra, desplazador, lblEstado);
         raiz = Ui.pagina(card);
     }
 

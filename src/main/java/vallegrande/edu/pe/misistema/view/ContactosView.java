@@ -50,14 +50,14 @@ public class ContactosView implements Page {
                 columna("Fecha", "fecha", 130), columna("Nombre", "nombre", 170),
                 columna("Celular", "celular", 120), columna("Correo", "correo", 200),
                 columna("Asunto", "asunto", 200));
-        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        ScrollPane desplazador = Ui.tablaDesplazable(tabla);
         tabla.setRowFactory(tv -> {
             TableRow<Mensaje> fila = new TableRow<>();
             fila.setOnMouseClicked(e -> { if (e.getClickCount() == 2 && !fila.isEmpty()) abrirFormulario(fila.getItem()); });
             return fila;
         });
         tabla.setItems(filtrados);
-        VBox.setVgrow(tabla, Priority.ALWAYS);
+        VBox.setVgrow(desplazador, Priority.ALWAYS);
 
         detalle.setEditable(false);
         detalle.setWrapText(true);
@@ -71,7 +71,7 @@ public class ContactosView implements Page {
         card.getChildren().addAll(
                 Ui.encabezado("Contactos", "Mensajes del formulario de la web. Doble clic en una fila para editarla.",
                         lblRegistros, Ui.boton("Actualizar", "btn-actualizar", this::cargar)),
-                barra, tabla, detalle, lblEstado);
+                barra, desplazador, detalle, lblEstado);
         raiz = Ui.pagina(card);
     }
 
