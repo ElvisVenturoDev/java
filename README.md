@@ -20,12 +20,11 @@ mvn -version
 ## 1. Preparar la base de datos
 
 El esquema versionado se encuentra en
-[`src/resources/esquema.sql`](src/resources/esquema.sql) (hay una
-copia en la raíz como `esquema.sql`). Crea la base `Miskylac`, las tablas y los
-datos iniciales ejecutando:
+[`src/main/resources/esquema.sql`](src/main/resources/esquema.sql). Crea la base
+`Miskylac`, las tablas y los datos iniciales ejecutando:
 
 ```bash
-mysql -u <usuario> -p < src/resources/esquema.sql
+mysql -u <usuario> -p < src/main/resources/esquema.sql
 ```
 
 La aplicación de escritorio usa **las mismas tablas que la web**:
@@ -117,10 +116,8 @@ src/main/java/vallegrande/edu/pe/misistema/
 ├── model/                 # Entidades, DAO y conexión a la base de datos
 └── view/                  # Vistas y componentes JavaFX
 
-src/resources/
-└── esquema.sql            # Script de creación de la base de datos
-
 src/main/resources/
+├── esquema.sql            # Script de creación de la base de datos
 └── vallegrande/edu/pe/misistema/estilos.css
 ```
 
