@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Miskylac · Sistema de gestión (JavaFX)
 
 Aplicación de escritorio para la gestión de productos, inventario, clientes,
@@ -129,3 +130,6 @@ src/main/resources/
   el nombre de una tabla o columna, actualiza los DAO de la app.
 - Los directorios de IDE (`.idea/`, `*.iml`) y las salidas de compilación
   (`target/`, `dist/`) están excluidos del control de versiones.
+=======
+# java
+>>>>>>> 87c2e12208b4bac2b806a276a205b84a19714e03
