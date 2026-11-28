@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 /** Piezas de interfaz compartidas por todos los apartados. */
 final class Ui {
-    private static final String CSS = Ui.class.getResource("/vallegrande/edu/pe/misistema/estilos.css").toExternalForm();
+    private static final String css = Ui.class.getResource("/vallegrande/edu/pe/misistema/estilos.css").toExternalForm();
     private static final Logger REGISTRO = Logger.getLogger(Ui.class.getName());
 
     private Ui() {}
@@ -164,7 +164,7 @@ final class Ui {
         d.setHeaderText(null);
         ButtonType btnGuardar = new ButtonType("Guardar", ButtonBar.ButtonData.OK_DONE);
         d.getDialogPane().getButtonTypes().addAll(btnGuardar, ButtonType.CANCEL);
-        d.getDialogPane().getStylesheets().add(CSS);
+        d.getDialogPane().getStylesheets().add(css);
 
         Label lblTitulo = new Label(titulo);
         lblTitulo.getStyleClass().add("page-title");
